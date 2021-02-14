@@ -22,6 +22,10 @@ Route::post('register', 'App\Http\Controllers\Api\Auth\RegisterController');
 Route::post('login', 'App\Http\Controllers\Api\Auth\LoginController');
 Route::post('logout', 'App\Http\Controllers\Api\Auth\LogoutController');
 
+Route::middleware('auth:api')->group( function () {
+    Route::resource('contacts', 'App\Http\Controllers\Api\ContactController');
+});
+
 /*Route::group(['namespace' => 'Api'], function () {
     Route::group(['namespace' => 'Auth'], function () {
         Route::post('register', 'RegisterController@test');

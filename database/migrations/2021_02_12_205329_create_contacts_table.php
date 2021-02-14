@@ -13,14 +13,17 @@ class CreateContactsTable extends Migration
      */
     public function up()
     {
-        /*Schema::create('contacts', function (Blueprint $table) {
+        Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->string('creater');
+            $table->unsignedBigInteger('creater');
             $table->string('fio');
             $table->string('phone');
-            $table->string('favorites');
+            $table->boolean('favorites')->default(0);
             $table->timestamps();
-        });*/
+        });
+        Schema::table('contacts', function (Blueprint $table) {
+            $table->foreign('creater')->references('id')->on('users');
+        });
     }
 
     /**
