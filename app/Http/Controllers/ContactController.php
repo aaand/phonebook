@@ -13,12 +13,16 @@ class ContactController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $input = $request->all();
+        $contacts = Contact::latest()->where('creater', $request->user()->id);
+        if (isset($input['favorites'])) {
+            $contacts = $contacts->where('favorites', $input['favorites']);
+        }
+        $contacts = $contacts->paginate(5);
 
-        $contacts = Contact::latest()->paginate(5);
-        //dd($contacts);
-        return view('contacts.index',compact('contacts'))
+        return view('contacts.index', compact('contacts'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
@@ -35,7 +39,7 @@ class ContactController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(ContactFormRequest $request)
@@ -46,36 +50,36 @@ class ContactController extends Controller
         Contact::create($input);
 
         return redirect()->route('contacts.index')
-            ->with('success','Contact created successfully.');
+            ->with('success', 'Contact created successfully.');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Contact  $contact
+     * @param \App\Contact $contact
      * @return \Illuminate\Http\Response
      */
     public function show(Contact $contact)
     {
-        return view('contacts.show',compact('contact'));
+        return view('contacts.show', compact('contact'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Contact  $contact
+     * @param \App\Contact $contact
      * @return \Illuminate\Http\Response
      */
     public function edit(Contact $contact)
     {
-        return view('contacts.edit',compact('contact'));
+        return view('contacts.edit', compact('contact'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Contact  $contact
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Contact $contact
      * @return \Illuminate\Http\Response
      */
     public function update(ContactFormRequest $request, Contact $contact)
@@ -83,13 +87,13 @@ class ContactController extends Controller
         $contact->update($request->all());
 
         return redirect()->route('contacts.index')
-            ->with('success','Contact updated successfully');
+            ->with('success', 'Contact updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Contact  $contact
+     * @param \App\Contact $contact
      * @return \Illuminate\Http\Response
      */
     public function destroy(Contact $contact)
@@ -97,6 +101,6 @@ class ContactController extends Controller
         $contact->delete();
 
         return redirect()->route('contacts.index')
-            ->with('success','Contact deleted successfully');
+            ->with('success', 'Contact deleted successfully');
     }
 }

@@ -198,5 +198,19 @@
     "You may delete any of your existing tokens if they are no longer needed.": "Вы можете удалить любой из имеющихся у Вас токенов, если они больше не нужны.",
     "You may not delete your personal team.": "Вы не можете удалить свою команду.",
     "You may not leave a team that you created.": "Вы не можете покидать созданную Вами команду.",
-    "Your email address is not verified.": "Ваш email адрес не подтвержден."
+    "Your email address is not verified.": "Ваш email адрес не подтвержден.",
+
+    "Edit Contact": "Редактировать контакт",
+    "Submit": "Подтвердить",
+    "Action": "Действия",
+    "Show": "Смореть",
+    "Edit": "Редактировать",
+    "All Contacts": "Все контакты",
+    "Favorites Contacts": "Избранные контакты",
+    "Create New Contact": "Создать новый контакт",
+    "favorites": "Избранный",
+    "fio": "Фамилия Имя Отчество",
+    "phone": "Телефон",
+    "Back": "Назад",
+    "Show Contact": "Смотреть контакт"
 }

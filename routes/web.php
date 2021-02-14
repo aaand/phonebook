@@ -14,14 +14,11 @@ use App\Http\Controllers\ContactController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
-Route::group(['middleware' => 'web'], function () {
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware('auth:web')->group( function () {
+    Route::get('/', [ContactController::class, 'index'])->name('home');
+    Route::resource('contacts', ContactController::class);
+    Route::get('contacts/favorites/{contact}', [ContactController::class, 'update'])->name('contacts.favorites');
 });
-Route::resource('contacts', ContactController::class);
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
