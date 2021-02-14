@@ -57,9 +57,11 @@ class ContactController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Contact $contact)
     {
-        $contact = Contact::find($id);
+
+        //$contact = Contact::find($id);
+        $this->authorize('view', $contact);
 
         if (is_null($contact)) {
             return $this->sendError('Contact not found.');
@@ -77,6 +79,7 @@ class ContactController extends BaseController
      */
     public function update(ContactFormRequest $request, Contact $contact)
     {
+        $this->authorize('update', $contact);
         $input = $request->all();
 
         $contact->fio = $input['fio'];
@@ -95,6 +98,7 @@ class ContactController extends BaseController
      */
     public function destroy(Contact $contact)
     {
+        $this->authorize('delete', $contact);
         $contact->delete();
 
         return $this->sendResponse($contact->toArray(), 'Contact deleted successfully.');

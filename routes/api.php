@@ -26,10 +26,3 @@ Route::middleware('auth:api')->group( function () {
     Route::resource('contacts', 'App\Http\Controllers\Api\ContactController');
 });
 
-/*Route::group(['namespace' => 'Api'], function () {
-    Route::group(['namespace' => 'Auth'], function () {
-        Route::post('register', 'RegisterController@test');
-        Route::post('login', 'LoginController@__invoke');
-        Route::post('logout', 'LogoutController@__invoke')->middleware('auth:api');
-    });
-});*/
