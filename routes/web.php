@@ -18,6 +18,7 @@ Auth::routes();
 
 Route::middleware('auth:web')->group( function () {
     Route::get('/', [ContactController::class, 'index'])->name('home');
+    Route::get('/home', [ContactController::class, 'index'])->name('home');
     Route::resource('contacts', ContactController::class);
     Route::get('contacts/favorites/{contact}', [ContactController::class, 'update'])->name('contacts.favorites');
 });
