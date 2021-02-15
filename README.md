@@ -14,8 +14,8 @@ url приложения http://127.0.0.1:8000. Для доступа нужно
 
 ### Api
 
-- Login: метод:GET, URL:http://127.0.0.1:8000/api/login (params: email, password)
-- Register: метод:GET, URL:http://127.0.0.1:8000/api/register (params: name, email, password, c_password)
+- Login: метод:POST, URL:http://127.0.0.1:8000/api/login (params: email, password)
+- Register: метод:POST, URL:http://127.0.0.1:8000/api/register (params: name, email, password, c_password)
 - List: метод:GET, URL:http://127.0.0.1:8000/api/contacts
 - Create: метод:POST, URL:http://127.0.0.1:8000/api/contacts (params: fio, phone)
 - Show: метод:GET, URL:http://127.0.0.1:8000/api/contacts/{id}
