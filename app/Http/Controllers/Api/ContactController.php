@@ -10,18 +10,16 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ContactFormRequest;
+use App\Services\ContactService;
 
 class ContactController extends BaseController
 {
-    protected $auth;
+    protected $service;
 
-    /*public function __construct()
+    public function __construct(ContactService $service)
     {
-        print_r(Auth::user());
-        //print_r( Auth::guard('api')->user());
-        print_r( '123');
-        die();
-    }*/
+        $this->service = $service;
+    }
 
     /**
      * Display a listing of the resource.
@@ -30,7 +28,7 @@ class ContactController extends BaseController
      */
     public function index(Request $request)
     {
-        $contacts = Contact::where('creater', $request->user()->id)->get();
+        $contacts = $this->service->indexApi($request);
 
         return $this->sendResponse($contacts->toArray(), 'Contacts retrieved successfully.');
     }
@@ -38,15 +36,12 @@ class ContactController extends BaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(ContactFormRequest $request)
     {
-        $input = $request->all();
-        $input['creater'] = $request->user()->id;
-
-        $contact = Contact::create($input);
+        $contact = $this->service->store($request);
 
         return $this->sendResponse($contact->toArray(), 'Contact created successfully.');
     }
@@ -54,18 +49,12 @@ class ContactController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show(Contact $contact)
     {
-
-        //$contact = Contact::find($id);
         $this->authorize('view', $contact);
-
-        if (is_null($contact)) {
-            return $this->sendError('Contact not found.');
-        }
 
         return $this->sendResponse($contact->toArray(), 'Contact retrieved successfully.');
     }
@@ -73,19 +62,15 @@ class ContactController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(ContactFormRequest $request, Contact $contact)
     {
         $this->authorize('update', $contact);
-        $input = $request->all();
 
-        $contact->fio = $input['fio'];
-        $contact->phone = $input['phone'];
-        $contact->creater = $request->user()->id;
-        $contact->save();
+        $this->service->update($request, $contact);
 
         return $this->sendResponse($contact->toArray(), 'Contact updated successfully.');
     }
@@ -93,13 +78,14 @@ class ContactController extends BaseController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Contact $contact)
     {
         $this->authorize('delete', $contact);
-        $contact->delete();
+
+        $this->service->destroy($contact);
 
         return $this->sendResponse($contact->toArray(), 'Contact deleted successfully.');
     }

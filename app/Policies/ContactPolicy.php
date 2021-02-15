@@ -23,21 +23,33 @@ class ContactPolicy
 
     public function edit(User $user, Contact $contact)
     {
-        return $user->id == $contact->creater;
+        if ($user->id == $contact->creater) {
+            return true;
+        }
+        abort(403, 'Access denied');
     }
 
     public function update(User $user, Contact $contact)
     {
-        return $user->id == $contact->creater;
+        if ($user->id == $contact->creater) {
+            return true;
+        }
+        abort(403, 'Access denied');
     }
 
     public function delete(User $user, Contact $contact)
     {
-        return $user->id == $contact->creater;
+        if ($user->id == $contact->creater) {
+            return true;
+        }
+        abort(403, 'Access denied');
     }
 
     public function view(User $user, Contact $contact)
     {
-        return $user->id == $contact->creater;
+        if ($user->id == $contact->creater) {
+            return true;
+        }
+        abort(403, 'Access denied');
     }
 }

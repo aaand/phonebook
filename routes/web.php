@@ -21,4 +21,3 @@ Route::middleware('auth:web')->group( function () {
     Route::resource('contacts', ContactController::class);
     Route::get('contacts/favorites/{contact}', [ContactController::class, 'update'])->name('contacts.favorites');
 });
-

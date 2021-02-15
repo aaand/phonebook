@@ -25,7 +25,7 @@ class ContactFormRequest extends FormRequest
     {
         return [
             'fio' => ['required', 'string', 'max:255'],
-            'phone' => ['required'],
+            'phone' => ['required', 'regex:/^[0-9\s+-,.]+$/'],
         ];
     }
 }

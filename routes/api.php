@@ -25,4 +25,3 @@ Route::post('logout', 'App\Http\Controllers\Api\Auth\LogoutController');
 Route::middleware('auth:api')->group( function () {
     Route::resource('contacts', 'App\Http\Controllers\Api\ContactController');
 });
-

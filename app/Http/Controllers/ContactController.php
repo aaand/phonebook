@@ -5,9 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Contact;
 use App\Http\Requests\ContactFormRequest;
+use App\Services\ContactService;
 
 class ContactController extends Controller
 {
+    protected $service;
+
+    public function __construct(ContactService $service)
+    {
+        $this->service = $service;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,12 +23,7 @@ class ContactController extends Controller
      */
     public function index(Request $request)
     {
-        $input = $request->all();
-        $contacts = Contact::latest()->where('creater', $request->user()->id);
-        if (isset($input['favorites'])) {
-            $contacts = $contacts->where('favorites', $input['favorites']);
-        }
-        $contacts = $contacts->paginate(5);
+        $contacts = $this->service->index($request);
 
         return view('contacts.index', compact('contacts'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
@@ -44,10 +47,7 @@ class ContactController extends Controller
      */
     public function store(ContactFormRequest $request)
     {
-        $input = $request->all();
-        $input['creater'] = $request->user()->id;
-
-        Contact::create($input);
+        $this->service->store($request);
 
         return redirect()->route('contacts.index')
             ->with('success', 'Contact created successfully.');
@@ -62,6 +62,7 @@ class ContactController extends Controller
     public function show(Contact $contact)
     {
         $this->authorize('view', $contact);
+
         return view('contacts.show', compact('contact'));
     }
 
@@ -74,6 +75,7 @@ class ContactController extends Controller
     public function edit(Contact $contact)
     {
         $this->authorize('edit', $contact);
+
         return view('contacts.edit', compact('contact'));
     }
 
@@ -87,7 +89,8 @@ class ContactController extends Controller
     public function update(ContactFormRequest $request, Contact $contact)
     {
         $this->authorize('update', $contact);
-        $contact->update($request->all());
+
+        $this->service->update($request, $contact);
 
         return redirect()->route('contacts.index')
             ->with('success', 'Contact updated successfully');
@@ -102,7 +105,8 @@ class ContactController extends Controller
     public function destroy(Contact $contact)
     {
         $this->authorize('delete', $contact);
-        $contact->delete();
+
+        $this->service->destroy($contact);
 
         return redirect()->route('contacts.index')
             ->with('success', 'Contact deleted successfully');
